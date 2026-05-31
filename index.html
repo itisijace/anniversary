@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Paul Jericho — June 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Tenor+Sans&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1020;
+    --muted: #6b5f74;
+    --accent: #7c5cbf;
+    --accent-light: #b99de0;
+    --accent-pale: #f0eafa;
+    --gold: #c9a96e;
+    --bg: #faf8fc;
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── PARTICLES ── */
+  #particles {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    opacity: 0;
+    animation: float-up linear infinite;
+  }
+
+  @keyframes float-up {
+    0%   { transform: translateY(0) scale(1);   opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.2; }
+    100% { transform: translateY(-100vh) scale(0.3); opacity: 0; }
+  }
+
+  /* ── SEAL SCREEN ── */
+  #seal-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+
+  #seal-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .seal-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    animation: gentle-rise 1.2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  @keyframes gentle-rise {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .wax-seal {
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    filter: drop-shadow(0 8px 24px rgba(124,92,191,0.25));
+    transition: transform 0.3s ease, filter 0.3s ease;
+    animation: seal-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes seal-pulse {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.04); }
+  }
+
+  .wax-seal:hover {
+    transform: scale(1.08) !important;
+    filter: drop-shadow(0 12px 32px rgba(124,92,191,0.4));
+    animation: none;
+  }
+
+  .seal-hint {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0;
+    animation: fade-in 1s 0.8s ease both;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── MAIN CONTENT ── */
+  #main {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1.5rem 6rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+
+  #main.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+  }
+
+  .pre-line {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: slide-up 0.8s 0.2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .name-title {
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    opacity: 0;
+    animation: slide-up 0.8s 0.4s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .name-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem auto;
+    width: 260px;
+    opacity: 0;
+    animation: slide-up 0.8s 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, var(--accent-light));
+  }
+
+  .divider-line:last-child {
+    background: linear-gradient(to left, transparent, var(--accent-light));
+  }
+
+  .divider-gem {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-light);
+    transform: rotate(45deg);
+  }
+
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── CARD ── */
+  .invitation-card {
+    background: var(--white);
+    border: 0.5px solid rgba(124,92,191,0.18);
+    border-radius: 2px;
+    max-width: 580px;
+    width: 100%;
+    padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 3.5rem);
+    position: relative;
+    margin: 0 auto;
+    opacity: 0;
+    animation: slide-up 0.9s 0.8s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .card-corner {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+  }
+  .card-corner svg { width: 100%; height: 100%; }
+  .card-corner.tl { top: 12px; left: 12px; }
+  .card-corner.tr { top: 12px; right: 12px; transform: scaleX(-1); }
+  .card-corner.bl { bottom: 12px; left: 12px; transform: scaleY(-1); }
+  .card-corner.br { bottom: 12px; right: 12px; transform: scale(-1); }
+
+  .salutation {
+    font-size: 1.05rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 1.8rem;
+    display: block;
+  }
+
+  .body-text {
+    font-size: 1.2rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--ink);
+    margin-bottom: 2rem;
+  }
+
+  .quote-block {
+    border-left: 1.5px solid var(--accent-light);
+    padding: 0.6rem 1.4rem;
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* ── CUSTOM NOTE ── */
+  .custom-note {
+    background: var(--accent-pale);
+    border: 0.5px solid rgba(124,92,191,0.15);
+    border-radius: 2px;
+    padding: 1.2rem 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink);
+    line-height: 1.8;
+  }
+
+  /* ── DETAILS ── */
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+    padding: 2rem 0;
+    border-top: 0.5px solid rgba(124,92,191,0.12);
+    border-bottom: 0.5px solid rgba(124,92,191,0.12);
+  }
+
+  .detail-item { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .detail-label {
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+  }
+
+  .detail-value {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  .closing {
+    font-size: 1.05rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 2rem;
+    display: block;
+  }
+
+  /* ── CTA BUTTON ── */
+  .cta-wrap {
+    text-align: center;
+    margin-top: 3.5rem;
+    opacity: 0;
+    animation: slide-up 0.9s 1s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: transparent;
+    border: 0.5px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1rem 3rem;
+    cursor: pointer;
+    transition: background 0.35s ease, color 0.35s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+    z-index: 0;
+  }
+
+  .cta-btn:hover::before { transform: scaleX(1); }
+  .cta-btn:hover { color: var(--white); }
+  .cta-btn span { position: relative; z-index: 1; }
+
+  /* ── RSVP MODAL ── */
+  #rsvp-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,16,32,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+
+  #rsvp-modal.open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-box {
+    background: var(--white);
+    max-width: 440px;
+    width: 100%;
+    padding: 3rem 2.5rem;
+    text-align: center;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+    border: 0.5px solid rgba(124,92,191,0.2);
+  }
+
+  #rsvp-modal.open .modal-box { transform: translateY(0) scale(1); }
+
+  .modal-title {
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 0.7rem;
+    color: var(--ink);
+  }
+
+  .modal-sub {
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+
+  .modal-btn {
+    display: block;
+    width: 100%;
+    padding: 0.9rem;
+    font-family: 'Tenor Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 0.5px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+    transition: background 0.25s, color 0.25s;
+  }
+
+  .modal-btn:hover, .modal-btn.primary {
+    background: var(--accent);
+    color: var(--white);
+  }
+
+  .modal-close {
+    margin-top: 1rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-decoration: underline;
+    background: none;
+    border: none;
+    font-family: inherit;
+  }
+
+  /* ── HEARTS BURST ── */
+  .heart-burst {
+    position: fixed;
+    pointer-events: none;
+    z-index: 300;
+    font-size: 1.4rem;
+  }
+
+  @keyframes heart-fly {
+    0%   { opacity: 1; transform: translate(0,0) scale(1) rotate(0deg); }
+    100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.4) rotate(var(--r)); }
+  }
+
+  /* ── FOOTER ── */
+  .footer-line {
+    margin-top: 5rem;
+    text-align: center;
+    opacity: 0;
+    animation: fade-in 1s 1.4s ease both;
+  }
+
+  .footer-line span {
+    font-size: 0.68rem;
+    font-family: 'Tenor Sans', sans-serif;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+  }
+
+  @media (max-width: 480px) {
+    .details-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating particles -->
+<canvas id="particles"></canvas>
+
+<!-- Seal / Opening Screen -->
+<div id="seal-screen">
+  <div class="seal-wrapper">
+    <svg class="wax-seal" id="open-seal" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="button" tabindex="0" aria-label="Open your invitation">
+      <circle cx="60" cy="60" r="55" fill="#7c5cbf"/>
+      <circle cx="60" cy="60" r="50" fill="none" stroke="#b99de0" stroke-width="0.8"/>
+      <circle cx="60" cy="60" r="44" fill="none" stroke="#b99de0" stroke-width="0.4" stroke-dasharray="3 4"/>
+      <!-- Star points -->
+      <g fill="#b99de0">
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(0 60 60)"/>
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(45 60 60)"/>
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(90 60 60)"/>
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(135 60 60)"/>
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(180 60 60)"/>
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(225 60 60)"/>
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(270 60 60)"/>
+        <ellipse cx="60" cy="22" rx="3" ry="6" transform="rotate(315 60 60)"/>
+      </g>
+      <!-- Monogram -->
+      <text x="60" y="54" text-anchor="middle" fill="#f0eafa" font-family="Cormorant Garamond, Georgia, serif" font-size="14" font-weight="300" letter-spacing="4">PJ</text>
+      <text x="60" y="70" text-anchor="middle" fill="#d4b8f0" font-family="Cormorant Garamond, Georgia, serif" font-size="9" font-style="italic">one year</text>
+    </svg>
+    <p class="seal-hint">break the seal to open</p>
+  </div>
+</div>
+
+<!-- Main Invitation Content -->
+<div id="main">
+  <canvas id="particles-main" style="display:none"></canvas>
+
+  <header class="header">
+    <span class="pre-line">a private invitation</span>
+    <h1 class="name-title">For <em>Paul Jericho</em></h1>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-gem"></div>
+      <div class="divider-line"></div>
+    </div>
+  </header>
+
+  <div class="invitation-card">
+    <!-- Decorative corners -->
+    <div class="card-corner tl"><svg viewBox="0 0 22 22" fill="none"><path d="M1 21 L1 1 L21 1" stroke="#b99de0" stroke-width="0.8"/><circle cx="1" cy="1" r="2" fill="#b99de0"/></svg></div>
+    <div class="card-corner tr"><svg viewBox="0 0 22 22" fill="none"><path d="M1 21 L1 1 L21 1" stroke="#b99de0" stroke-width="0.8"/><circle cx="1" cy="1" r="2" fill="#b99de0"/></svg></div>
+    <div class="card-corner bl"><svg viewBox="0 0 22 22" fill="none"><path d="M1 21 L1 1 L21 1" stroke="#b99de0" stroke-width="0.8"/><circle cx="1" cy="1" r="2" fill="#b99de0"/></svg></div>
+    <div class="card-corner br"><svg viewBox="0 0 22 22" fill="none"><path d="M1 21 L1 1 L21 1" stroke="#b99de0" stroke-width="0.8"/><circle cx="1" cy="1" r="2" fill="#b99de0"/></svg></div>
+
+    <span class="salutation">My dearest Paul Jericho,</span>
+
+    <p class="body-text">
+      A year ago, something quiet and extraordinary began — and it has changed the way I see everything.
+      You have given me warmth in the ordinary moments, beauty in the in-between ones, and a reason to
+      look forward to every single day that follows.
+    </p>
+
+    <div class="quote-block">
+      "I have waited for this day as we wait for spring — knowing it will come, yet hardly daring to believe
+      how beautiful it will be."
+    </div>
+
+    <!-- 💜 PERSONAL NOTE — you can replace this section with your own words -->
+    <div class="custom-note">
+      <!-- Replace everything inside this div with your personal message to Paul Jericho. 
+           For example: "I still remember the first time you laughed at my terrible jokes..."
+           Keep it as long or as brief as feels right — this is your voice, not mine. -->
+      ✦ <em>[ Your personal note to Paul Jericho goes here. ]</em> ✦
+    </div>
+
+    <div class="details-grid">
+      <div class="detail-item">
+        <span class="detail-label">Occasion</span>
+        <span class="detail-value">Our First Anniversary</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Date</span>
+        <span class="detail-value">June 8, 2026</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Venue</span>
+        <span class="detail-value">Sabor Y Vino<br>Makati City</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Dress</span>
+        <span class="detail-value">Whatever makes you feel beautiful</span>
+      </div>
+    </div>
+
+    <p class="body-text" style="margin-bottom:0;">
+      All I ask is your presence — your laughter, your hand across the table, and one more evening
+      I will remember always.
+    </p>
+
+    <span class="closing">With all my love &amp; anticipation, ♡</span>
+  </div>
+
+  <div class="cta-wrap">
+    <button class="cta-btn" id="rsvp-btn"><span>Accept this invitation</span></button>
+  </div>
+
+  <div class="footer-line">
+    <span>June 8 · Makati City · One Year of Us</span>
+  </div>
+</div>
+
+<!-- RSVP Modal -->
+<div id="rsvp-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-box">
+    <h2 class="modal-title" id="modal-title">Will you join me?</h2>
+    <p class="modal-sub">June 8, 2026 · Sabor Y Vino, Makati City</p>
+    <button class="modal-btn primary" id="yes-btn">Yes — I wouldn't miss it for the world</button>
+    <button class="modal-btn" id="maybe-btn">Already marked on my calendar ♡</button>
+    <button class="modal-close" id="close-modal">close</button>
+  </div>
+</div>
+
+<script>
+  // ── PARTICLES
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function mkParticle() {
+    return {
+      x: Math.random() * W,
+      y: H + 10,
+      r: Math.random() * 2 + 1,
+      speed: Math.random() * 0.6 + 0.3,
+      opacity: 0,
+      phase: Math.random() * Math.PI * 2,
+      amp: Math.random() * 30 + 10,
+    };
+  }
+
+  for (let i = 0; i < 40; i++) {
+    const p = mkParticle();
+    p.y = Math.random() * H;
+    particles.push(p);
+  }
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, W, H);
+    particles.forEach((p, i) => {
+      p.y -= p.speed;
+      p.phase += 0.01;
+      p.x += Math.sin(p.phase) * 0.4;
+      const life = 1 - (p.y / H);
+      p.opacity = Math.min(life * 4, 1 - life * 0.5) * 0.5;
+      ctx.beginPath();
+      ctx.arc(p.x + Math.sin(p.phase) * p.amp * 0.05, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(185,157,224,${p.opacity})`;
+      ctx.fill();
+      if (p.y < -10) particles[i] = mkParticle();
+    });
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+
+  // ── SEAL OPEN
+  const sealScreen = document.getElementById('seal-screen');
+  const mainEl = document.getElementById('main');
+  const seal = document.getElementById('open-seal');
+
+  function openInvitation() {
+    sealScreen.classList.add('hidden');
+    setTimeout(() => {
+      mainEl.classList.add('revealed');
+    }, 400);
+    spawnHearts(window.innerWidth / 2, window.innerHeight / 2, 12);
+  }
+
+  seal.addEventListener('click', openInvitation);
+  seal.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openInvitation(); });
+
+  // ── HEARTS BURST
+  function spawnHearts(cx, cy, count) {
+    const hearts = ['♡', '✦', '◇', '♡'];
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('div');
+      el.className = 'heart-burst';
+      el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      const angle = (Math.PI * 2 / count) * i + Math.random() * 0.4;
+      const dist = 80 + Math.random() * 120;
+      el.style.setProperty('--tx', `${Math.cos(angle) * dist}px`);
+      el.style.setProperty('--ty', `${Math.sin(angle) * dist}px`);
+      el.style.setProperty('--r', `${(Math.random() - 0.5) * 360}deg`);
+      el.style.left = cx + 'px';
+      el.style.top = cy + 'px';
+      el.style.color = ['#7c5cbf','#b99de0','#c9a96e'][Math.floor(Math.random() * 3)];
+      el.style.animation = `heart-fly ${0.8 + Math.random() * 0.6}s cubic-bezier(0.16,1,0.3,1) forwards`;
+      el.style.animationDelay = `${Math.random() * 0.2}s`;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1800);
+    }
+  }
+
+  // ── RSVP MODAL
+  const modal = document.getElementById('rsvp-modal');
+  document.getElementById('rsvp-btn').addEventListener('click', e => {
+    modal.classList.add('open');
+    spawnHearts(e.clientX, e.clientY, 8);
+  });
+  document.getElementById('close-modal').addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+
+  document.getElementById('yes-btn').addEventListener('click', e => {
+    spawnHearts(e.clientX, e.clientY, 16);
+    document.getElementById('yes-btn').textContent = 'I knew you would ♡';
+    document.getElementById('yes-btn').style.background = '#b99de0';
+    setTimeout(() => modal.classList.remove('open'), 2200);
+  });
+
+  document.getElementById('maybe-btn').addEventListener('click', e => {
+    spawnHearts(e.clientX, e.clientY, 10);
+    setTimeout(() => modal.classList.remove('open'), 1200);
+  });
+</script>
+</body>
+</html>
