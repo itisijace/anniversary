@@ -504,7 +504,7 @@
 
   <header class="header">
     <span class="pre-line">a private invitation</span>
-    <h1 class="name-title">For <em>Paul Jericho</em></h1>
+    <h1 class="name-title"><em>Paul Jericho Saguno Aguila</em></h1>
     <div class="divider">
       <div class="divider-line"></div>
       <div class="divider-gem"></div>
@@ -522,14 +522,16 @@
     <span class="salutation">My dearest Babi,</span>
 
     <p class="body-text">
-      A year ago, something quiet and extraordinary began — and it has changed the way I see everything.
-      You have given me warmth in the ordinary moments, beauty in the in-between ones, and a reason to
+      A year ago, something quiet and extraordinary began—and it has changed the way I see everything.
+      You have given me warmth in the ordinary moments, beauty in the in-betweens, and a reason to
       look forward to every single day that follows.
     </p>
 
     <div class="quote-block">
-      "I have waited for this day as we wait for spring — knowing it will come, yet hardly daring to believe
-      how beautiful it will be."
+      "But if the dreams don't happen right away that's okay <br>
+       I just wanna be with you every single day <br>
+       For the rest of our lives" <br>
+       Happy First Anniversary, Babi 💜
     </div>
 
     <!-- 💜 PERSONAL NOTE — you can replace this section with your own words -->
@@ -537,7 +539,11 @@
       <!-- Replace everything inside this div with your personal message to Paul Jericho. 
            For example: "I still remember the first time you laughed at my terrible jokes..."
            Keep it as long or as brief as feels right — this is your voice, not mine. -->
-      ✦ <em>[ Your personal note to Paul Jericho goes here. ]</em> ✦
+      ✦ <em>[ It's been over a year since your world-class acting of intentionally avoiding eye contact just so I could approach you first.
+               It may not have been as smooth as we hoped it would be, but the year that has passed has been very fruitful and filled with adventures my neocortex will forever store.
+               I admit that I am difficult to put up with. I know projecting my personal standards onto you may be unfair, and for that, I apologize.
+               I pray that this may not be our last celebration of spending a year together. May we—in the face of challenges, disputes, and conundrums—see eye to eye and 
+               overcome those difficulties. After all, what makes this dawning year more exciting is that we get to see and spend each day together. ]</em> ✦
     </div>
 
     <div class="details-grid">
@@ -547,7 +553,7 @@
       </div>
       <div class="detail-item">
         <span class="detail-label">Date</span>
-        <span class="detail-value">June 8, 2026</span>
+        <span class="detail-value">June 8, 2026 | 9 PM </span>
       </div>
       <div class="detail-item">
         <span class="detail-label">Venue</span>
@@ -574,6 +580,15 @@
   <div class="footer-line">
     <span>June 8 · Makati City · One Year of Us</span>
   </div>
+</div>
+
+<!-- Hidden YouTube player -->
+<div id="yt-player" style="position:fixed;bottom:-9999px;left:-9999px;width:1px;height:1px;pointer-events:none;"></div>
+
+<!-- Music control pill -->
+<div id="music-pill" style="position:fixed;bottom:2rem;right:2rem;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border:0.5px solid rgba(124,92,191,0.25);border-radius:999px;padding:0.55rem 1.1rem;display:flex;align-items:center;gap:0.6rem;font-family:Tenor Sans,sans-serif;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:#7c5cbf;cursor:pointer;opacity:0;pointer-events:none;transition:opacity 0.6s ease;z-index:50;box-shadow:0 4px 20px rgba(124,92,191,0.12);">
+  <span id="music-icon">♫</span>
+  <span style="font-family:Tenor Sans,sans-serif;font-size:0.65rem;letter-spacing:0.12em;">Be With You</span>
 </div>
 
 <!-- RSVP Modal -->
@@ -641,12 +656,56 @@
   const mainEl = document.getElementById('main');
   const seal = document.getElementById('open-seal');
 
+  // ── YOUTUBE MUSIC
+  let ytPlayer = null;
+  let musicPlaying = false;
+
+  function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('yt-player', {
+      videoId: 'wKdQoLD8Wpg',
+      playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: 'wKdQoLD8Wpg' },
+      events: { onReady: () => {} }
+    });
+  }
+
+  // Load YT API
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+
+  const pill = document.getElementById('music-pill');
+  const musicIcon = document.getElementById('music-icon');
+
+  pill.addEventListener('click', () => {
+    if (!ytPlayer) return;
+    if (musicPlaying) {
+      ytPlayer.pauseVideo();
+      musicIcon.textContent = '♩';
+      musicPlaying = false;
+    } else {
+      ytPlayer.playVideo();
+      musicIcon.textContent = '♫';
+      musicPlaying = true;
+    }
+  });
+
   function openInvitation() {
     sealScreen.classList.add('hidden');
     setTimeout(() => {
       mainEl.classList.add('revealed');
     }, 400);
     spawnHearts(window.innerWidth / 2, window.innerHeight / 2, 12);
+
+    // Start music after seal click (user gesture allows autoplay)
+    setTimeout(() => {
+      if (ytPlayer && ytPlayer.playVideo) {
+        ytPlayer.playVideo();
+        musicPlaying = true;
+        musicIcon.textContent = '♫';
+      }
+      pill.style.opacity = '1';
+      pill.style.pointerEvents = 'auto';
+    }, 800);
   }
 
   seal.addEventListener('click', openInvitation);
